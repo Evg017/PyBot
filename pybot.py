@@ -1,7 +1,7 @@
 #!/usr/local/bin/python
 # -*- coding: utf-8 -*-from __future__ import print_function
 import telebot 
-bot = telebot.TeleBot('1742818293:AAGjT4xMXyozkXubnw225BjRaeNuqQlA6hA') #Токен бота
+bot = telebot.TeleBot('1787342730:AAExN5atfaxviT10ASvWhTIeHMiRFKhZxHE') #Токен бота
 from telebot import types # Импорт модуля для работы кнопок
 from datetime import datetime
 import calendar
@@ -13,24 +13,29 @@ from oauth2client.service_account import ServiceAccountCredentials
 import time, traceback
 import threading
 import logging
-# #
 logging.basicConfig(filename='telebot.log',
                     format = '%(asctime)s - [%(levelname)s] - %(message)s',
                     level=logging.DEBUG,
-                    encoding='utf-8')# Создание лоигруещего файла, с уровнем логирования INFO(DEBUG записываться не будет)
+                    encoding='utf-8')#Создание лоигруещего файла, с уровнем логирования INFO(DEBUG записываться не будет)
                                                                                  #кодинг utf-8
-logging.info('Bot is on. Start logging')# Запись в логирующий фалй о том что бот запущен
-# #
+logging.info('Bot is on. Start logging')#Запись в логирующий фалй о том что бот запущен
+
 CREDENTIALS_FILE = 'pytgbot-306409-16c86e02a8f5.json'  # Имя скаченного файла с закрытым ключом
 credentials = ServiceAccountCredentials.from_json_keyfile_name(CREDENTIALS_FILE, ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive'])
 httpAuth = credentials.authorize(httplib2.Http())
 service = apiclient.discovery.build('sheets', 'v4', http = httpAuth)
 spreadsheetId = '1GHGtG16XPKFo09bDrTVBFEL1A27VdQ9-m6l8gF8JtvQ' #ID Таблицы
-#
-date = datetime.isoweekday(datetime.now(tz=None))
+
+group1_today = str()
+group1_tomorrow = str()
+group1_week = str()
+group2_today = str()
+group2_tomorrow = str()
+group2_week = str()
+new_var = None
+date = datetime.isoweekday(datetime.now(tz=new_var))
 days=['Понедельник', 'Вторник','Среда','Четверг','Пятница','Суббота']
-#
-# 
+zvonok = str()
 def print_date(ranges):
     """
     Функция получает "координаты" таблицы и создает расписание на день, в зависимости от введенынх координат.
@@ -68,7 +73,6 @@ def print_date(ranges):
                         # Если пара не последня то записывается номер пары и пара с переносом строки
                         s = s + str(k) + ' пара: ' + str(sheet[0]) + '\n'
         return(s)# Возвращает полученную строку
-#
 def tomorrow(rasp, date):
     """
     Функция получает координаты таблицы, где rasp - это название группы, а date номер дня недели.
@@ -85,13 +89,11 @@ def tomorrow(rasp, date):
         return(f"{rasp}G2:G7")
     elif date == 7:
         return(f"{rasp}B2:B7")
-#
 # Расписание звонков. \n переводит на следующую строчку
 pnpt = u"1 пара: 8:30 — 10:05\n2 пара: 10:15 — 11:50\nОбед: 11:50 — 12:35\n3 пара: 12:35 — 14:10\n4 пара: 14:20 — 15:55\n5 пара: 16:05 — 17:40\n6 пара: 17:50 — 19:25"
 subb = u"1 пара: 8:30 — 10:05\n2 пара: 10:15 — 11:50\n3 пара: 12:00 — 13:40\n4 пара: 13:50 — 15:25\n5 пара: 15:35 — 17:10\n6 пара: 17:20 — 18:55"
 predpr = u"1 пара: 8:30 — 10:05\n2 пара: 10:15 — 11:50\n3 пара: 12:00 — 13:40\n4 пара: 13:50 — 14:50\n5 пара: 15:00 — 16:00"
-#
-#
+
 def auto_update():
     """
     Функция auto_update отвечает за обновление данных полученных из таблицы.
@@ -118,8 +120,8 @@ def auto_update():
         group2_today = print_date(g2_td)# Создание расписания на сегодня для группы 082. [date-1] т.к. в списке date "Понедельник" - это 0 элемент
     else:
         # Если сегодня воскресенье
-        group1_today='Сегодня воскресенье чел... Пар нет'
-        group2_today='Сегодня воскресенье чел... Пар нет'
+        group1_today='Сегодня воскресенье... Пар нет'
+        group2_today='Сегодня воскресенье... Пар нет'
     logging.info('TODAY CREATED')
     gr1_week = str()
     for i in range(0,6):
@@ -143,8 +145,7 @@ def start_message(message):
     keyboard.row('081', '082')# Создание кнопок "081" и "082"
     keyboard.row('Расписание звонков')# Создание кнопки "Расписание звонков" на новой строчке
     keyboard.row('Методичка')# Создание кнопки "Методичка" на новой строчке
-    bot.send_message(message.chat.id, 'Привет, выбери нужное. Если что, пользоваться нужно кнопками снизу.', reply_markup=keyboard)# Ответ бота и вывод клнопок под чатом
-#   
+    bot.send_message(message.chat.id, 'Привет, выбери нужное. Если что, пользоваться нужно кнопками снизу.\nОпрос таблицы каждые 10 минут, если расписание старое, подожди...', reply_markup=keyboard)# Ответ бота и вывод клнопок под чатом
 @bot.message_handler(commands=['report'])# Реагирует на /report
 def start_message(message):
     logging.info(f'chat_id = {message.chat.id}|username = {message.chat.username}|message = {message.text}')# Запись в логирующий файл с ID чата, никнеймом и сообщением
@@ -154,7 +155,6 @@ def start_message(message):
     else:
         # Пересылает сообщение пользователя в лс администратору с информацией о том кто отправил репорт(никнейм и айди чата)
         bot.send_message(882503361, f'"{message.text}" report from {message.chat.username}[{message.chat.id}]')
-#
 @bot.message_handler(content_types=['text'])# Метод, который получает сообщения и обрабатывает их
 def get_text_messages(message):
     logging.info(f'chat_id = {message.chat.id}|username = {message.chat.username}|message = {message.text}')
@@ -219,9 +219,9 @@ def get_text_messages(message):
         bot.send_message(message.chat.id, group2_week)
     else:
         bot.send_message(message.chat.id, "Я тебя не понимаю. Воспользуйся кнопками на экране.")
-#
+
 auto_update()# Вызов функции с обновлением данных расписаний
-#
+
 def every(delay, task):
     """
     Функция вызывающая функцию с задержкой в секундах
@@ -235,8 +235,6 @@ def every(delay, task):
         except Exception:
             traceback.print_exc()
         next_time += (time.time() - next_time) // delay * delay + delay
-#
-threading.Thread(target=lambda: every(3600, auto_update)).start()# Запускает вызов функции every в многопоточном режиме, что не мешает работе основной программы
-#
+threading.Thread(target=lambda: every(600, auto_update)).start()# Запускает вызов функции every в многопоточном режиме, что не мешает работе основной программы
 if __name__ == '__main__':
     bot.infinity_polling()# Бесконечная проверка чата с ботом на сообщения.
