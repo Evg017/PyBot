@@ -1,7 +1,7 @@
 #!/usr/local/bin/python
 # -*- coding: utf-8 -*-from __future__ import print_function
 import telebot 
-bot = telebot.TeleBot('1787342730:AAExN5atfaxviT10ASvWhTIeHMiRFKhZxHE') #Токен бота
+bot = telebot.TeleBot('1742818293:AAGjT4xMXyozkXubnw225BjRaeNuqQlA6hA') #Токен бота
 from telebot import types # Импорт модуля для работы кнопок
 from datetime import datetime
 import calendar
@@ -14,12 +14,12 @@ import time, traceback
 import threading
 import logging
 # #
-# logging.basicConfig(filename='telebot.log',
-#                     format = '%(asctime)s - [%(levelname)s] - %(message)s',
-#                     level=logging.DEBUG,
-#                     encoding='utf-8')#Создание лоигруещего файла, с уровнем логирования INFO(DEBUG записываться не будет)
-#                                                                                  #кодинг utf-8
-# logging.info('Bot is on. Start logging')#Запись в логирующий фалй о том что бот запущен
+logging.basicConfig(filename='telebot.log',
+                    format = '%(asctime)s - [%(levelname)s] - %(message)s',
+                    level=logging.DEBUG,
+                    encoding='utf-8')# Создание лоигруещего файла, с уровнем логирования INFO(DEBUG записываться не будет)
+                                                                                 #кодинг utf-8
+logging.info('Bot is on. Start logging')# Запись в логирующий фалй о том что бот запущен
 # #
 CREDENTIALS_FILE = 'pytgbot-306409-16c86e02a8f5.json'  # Имя скаченного файла с закрытым ключом
 credentials = ServiceAccountCredentials.from_json_keyfile_name(CREDENTIALS_FILE, ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive'])
