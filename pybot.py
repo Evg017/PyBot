@@ -49,7 +49,7 @@ def print_date(ranges):
     k=int()
     if sheet_values[-1][0] in days:
         # Если последний и единственный элемент строки это день недели, то пар в этот день нет.
-        return(f'{sheet_values[-1][0]}\nСегодня пар нет!')# Возвращает строку с днём недели и сообщение что пар нет
+        return(f'{sheet_values[-1][0]}:\nПар нет!\n')# Возвращает строку с днём недели и сообщение что пар нет
     else:
         for sheet in sheet_values:
             if sheet == []:
@@ -62,13 +62,13 @@ def print_date(ranges):
                 if str(sheet[0]) in days:
                     # Если строка это название дня недели счётчик пар не срабатывает
                     # и в переменную просто добавляется этот день с переносом на следующую строку
-                    s = s + str(sheet[0]) + '\n'
+                    s = s + str(sheet[0]) + ':'  + '\n'
                 else:
                     # Если пара есть и она не название дня недели
                     k += 1# Счётчик пар
                     if sheet == sheet_values[-1]:
                         # Если пара последняя то записывается номер пары и пара без переноса строки
-                        s = s + str(k) + ' пара: ' + str(sheet[0])
+                        s = s + str(k) + ' пара: ' + str(sheet[0]) + '\n'
                     else:
                         # Если пара не последня то записывается номер пары и пара с переносом строки
                         s = s + str(k) + ' пара: ' + str(sheet[0]) + '\n'
@@ -78,17 +78,17 @@ def tomorrow(rasp, date):
     Функция получает координаты таблицы, где rasp - это название группы, а date номер дня недели.
     """
     if date == 1:
-        return(f"{rasp}C2:C7")
+        return(f"{rasp}C2:C8")
     elif date == 2:
-        return(f"{rasp}D2:D7")
+        return(f"{rasp}D2:D8")
     elif date == 3:
-        return(f"{rasp}E2:E7")
+        return(f"{rasp}E2:E8")
     elif date == 4:
-        return(f"{rasp}F2:F7")
+        return(f"{rasp}F2:F8")
     elif date == 5:
-        return(f"{rasp}G2:G7")
+        return(f"{rasp}G2:G8")
     elif date == 7:
-        return(f"{rasp}B2:B7")
+        return(f"{rasp}B2:B8")
 # Расписание звонков. \n переводит на следующую строчку
 pnpt = u"1 пара: 8:30 — 10:05\n2 пара: 10:15 — 11:50\nОбед: 11:50 — 12:35\n3 пара: 12:35 — 14:10\n4 пара: 14:20 — 15:55\n5 пара: 16:05 — 17:40\n6 пара: 17:50 — 19:25"
 subb = u"1 пара: 8:30 — 10:05\n2 пара: 10:15 — 11:50\n3 пара: 12:00 — 13:40\n4 пара: 13:50 — 15:25\n5 пара: 15:35 — 17:10\n6 пара: 17:20 — 18:55"
@@ -99,7 +99,7 @@ def auto_update():
     Функция auto_update отвечает за обновление данных полученных из таблицы.
     """
 
-    ranges=['B2:B7','C2:C7','D2:D7','E2:E7','F2:F7','G2:G7']# Координаты для таблицы
+    ranges=['B2:B8','C2:C8','D2:D8','E2:E8','F2:F8','G2:G8']# Координаты для таблицы
     g1 = 'Расписание гр.081!'
     g2 = 'Расписание гр.082!'
     date = datetime.isoweekday(datetime.now(tz=None))# Получение номера дня недели
@@ -145,7 +145,7 @@ def start_message(message):
     keyboard.row('081', '082')# Создание кнопок "081" и "082"
     keyboard.row('Расписание звонков')# Создание кнопки "Расписание звонков" на новой строчке
     keyboard.row('Методичка')# Создание кнопки "Методичка" на новой строчке
-    bot.send_message(message.chat.id, 'Привет, выбери нужное. Если что, пользоваться нужно кнопками снизу.\nОпрос таблицы каждые 10 минут, если расписание старое, подожди...', reply_markup=keyboard)# Ответ бота и вывод клнопок под чатом
+    bot.send_message(message.chat.id, 'Привет, выбери нужное. Навиация с помощью кнопок внизу.\nОпрос таблицы каждые 10 минут.', reply_markup=keyboard)# Ответ бота и вывод клнопок под чатом
 @bot.message_handler(commands=['report'])# Реагирует на /report
 def start_message(message):
     logging.info(f'chat_id = {message.chat.id}|username = {message.chat.username}|message = {message.text}')# Запись в логирующий файл с ID чата, никнеймом и сообщением
