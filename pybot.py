@@ -11,7 +11,7 @@ import time, traceback
 import threading
 import logging
 
-bot = telebot.TeleBot('1787342730:AAExN5atfaxviT10ASvWhTIeHMiRFKhZxHE') #Токен бота
+bot = telebot.TeleBot('1947140208:AAHmjPReky6jLUcbzHQ9OGLB5Yw15ePCagM') #Токен бота
 
 logging.basicConfig(filename='telebot.log',
                     format = '%(asctime)s - [%(levelname)s] - %(message)s',
